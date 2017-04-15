@@ -1,4 +1,5 @@
 import sqlite3
+import uuid
 from poll import Poll
 from poll_option import PollOption
 
@@ -19,12 +20,11 @@ class PollDatabase:
 
     def add_poll(self, poll: Poll):
 
-        self.cursor.execute('INSERT INTO polls (name, id) VALUES ("{}", {})'
-                            .format(poll.name, poll.id))
+        self.cursor.execute('INSERT INTO polls (name, id) VALUES (?, ?)', (poll.name, poll.id))
 
         for option in poll.poll_options:
-            self.cursor.execute('INSERT INTO options (name, poll, id) VALUES ("{}", {}, {})'
-                                .format(option.name, poll.id, option.id))
+            self.cursor.execute('INSERT INTO options (name, poll, id) VALUES (?, ?, ?)',
+                                (option.name, poll.id, option.id))
 
         self.conn.commit()
 

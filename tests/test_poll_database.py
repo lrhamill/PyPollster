@@ -28,6 +28,14 @@ class TestPollDatabase(unittest.TestCase):
         self.assertEqual(len(output), 1)
         self.assertTrue(output[0].name == "poll")
 
+    def test_get_polls_ID_values_match_as_expected(self):
+        test_poll = Poll("poll")
+        self.db.add_poll(test_poll)
+        output = self.db.get_polls_with_name("poll")
+
+        self.assertEqual(len(output), 1)
+        self.assertEqual(output[0].id, test_poll.id)
+
     def test_get_polls_with_options_returns_poll_with_correct_options(self):
 
         test_poll = Poll("options_test")
@@ -50,8 +58,6 @@ class TestPollDatabase(unittest.TestCase):
         self.assertEqual(len(output[0].poll_options), len(test_poll2.poll_options))
         for actual, expected in zip(output[0].poll_options, test_poll2.poll_options):
             self.assertEqual(actual.name, expected.name)
-
-
 
 if __name__ == '__main__':
     unittest.main()
